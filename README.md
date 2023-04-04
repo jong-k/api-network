@@ -1,7 +1,13 @@
 # API Network
 
+## 실행방법
+### Client
+- npm run client
+### Server
+- npm run server
+
 <details>
-	<summary>자잘한 팁</summary>
+	<summary>0. 자잘한 팁</summary>
 
 ### gitignore
 root 에서 .next 추가해놓으면
