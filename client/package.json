@@ -19,6 +19,7 @@
     "sass": "^1.60.0"
   },
   "devDependencies": {
+    "prop-types": "^15.8.1",
     "webpack": "^5.77.0"
   }
 }
