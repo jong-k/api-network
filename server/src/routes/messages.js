@@ -9,9 +9,11 @@ const messagesRoute = [
     // GET : 모든 메시지
     method: "get",
     route: "/messages",
-    handler: (req, res) => {
+    handler: ({ query: { cursor = "" } }, res) => {
       const msgs = getMsgs();
-      res.send(msgs);
+      // 최초에는 cursor가 빈값이라 findIndex가 -1 을 반환하기 때문에 +1 더해서 0으로 보정
+      const fromIndex = msgs.findIndex((msg) => msg.id === cursor) + 1;
+      res.send(msgs.slice(fromIndex, fromIndex + 15)); // 한번에 15개 데이터를 불러옴
     },
   },
   {
@@ -35,16 +37,21 @@ const messagesRoute = [
     method: "post",
     route: "/messages",
     handler: ({ body }, res) => {
-      const msgs = getMsgs();
-      const newMsgs = {
-        id: v4(),
-        text: body.text,
-        userId: body.userId,
-        timestamp: Date.now(),
-      };
-      msgs.unshift(newMsgs);
-      setMsgs(newMsgs);
-      res.send(newMsgs); // 응답 : 생성한 아이템 1개
+      try {
+        if (!body.userId) throw Error("userId가 없습니다.");
+        const msgs = getMsgs();
+        const newMsgs = {
+          id: v4(),
+          text: body.text,
+          userId: body.userId,
+          timestamp: Date.now(),
+        };
+        msgs.unshift(newMsgs);
+        setMsgs(msgs);
+        res.send(newMsgs); // 응답 : 생성한 아이템 1개
+      } catch (err) {
+        res.status(500).send({ error: err });
+      }
     },
   },
   {
@@ -73,12 +80,12 @@ const messagesRoute = [
     // DELETE : 메시지 삭제
     method: "delete",
     route: "/messages/:id",
-    handler: ({ body, params: { id } }, res) => {
+    handler: ({ params: { id }, query: { userId } }, res) => {
       try {
         const msgs = getMsgs();
         const targetIndex = msgs.findIndex((msg) => msg.id === id);
         if (targetIndex < 0) throw Error("메시지가 없습니다.");
-        if (msgs[targetIndex].userId !== body.userId)
+        if (msgs[targetIndex].userId !== userId)
           throw Error("사용자가 다릅니다.");
 
         const deletedMsg = msgs[targetIndex];

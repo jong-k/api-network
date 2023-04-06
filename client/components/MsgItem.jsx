@@ -10,6 +10,7 @@ const MsgItem = ({
   onDelete,
   isEditing,
   startEdit,
+  myId,
 }) => {
   return (
     <li className="messages__item">
@@ -33,17 +34,19 @@ const MsgItem = ({
       ) : (
         text
       )}
-
-      <div className="messages__buttons">
-        <button onClick={startEdit}>수정</button>
-        <button onClick={onDelete}>삭제</button>
-      </div>
+      {/* query string으로 받아온 myId 가 userId와 같을 때만 수정/삭제 가능 */}
+      {myId === userId && (
+        <div className="messages__buttons">
+          <button onClick={startEdit}>수정</button>
+          <button onClick={onDelete}>삭제</button>
+        </div>
+      )}
     </li>
   );
 };
 
 MsgItem.propTypes = {
-  id: PropTypes.number,
+  id: PropTypes.string,
   userId: PropTypes.string,
   timestamp: PropTypes.number,
   text: PropTypes.string,
@@ -51,6 +54,7 @@ MsgItem.propTypes = {
   onDelete: PropTypes.func,
   isEditing: PropTypes.bool,
   startEdit: PropTypes.func,
+  myId: PropTypes.string,
 };
 
 export default MsgItem;
