@@ -4,13 +4,14 @@ import MsgItem from "./MsgItem";
 import MsgInput from "./MsgInput";
 import fetcher from "../fetcher";
 import useInfiniteScroll from "../hooks/useInfiniteScroll";
+import PropTypes from "prop-types";
 
-const MsgList = () => {
+const MsgList = ({ serverMsgs, users }) => {
   // url/?userId="___" 형태로 빈칸에 userId querystring을 받아와줌
   const { query } = useRouter();
   // url에서 /?userId 혹은 /?userid 둘다 가능하게 설정
   const userId = query.userId || query.userid || "";
-  const [msgs, setMsgs] = useState([]);
+  const [msgs, setMsgs] = useState(serverMsgs);
   const [editingId, setEditingId] = useState(null);
   const [hasNext, setHasNext] = useState(true);
   const fetchMoreEl = useRef(null);
@@ -96,6 +97,7 @@ const MsgList = () => {
               isEditing={editingId === row.id}
               startEdit={() => setEditingId(row.id)}
               myId={userId}
+              user={users[row.userId]}
             />
           ))}
       </ul>
@@ -105,3 +107,8 @@ const MsgList = () => {
 };
 
 export default MsgList;
+
+MsgList.propTypes = {
+  serverMsgs: PropTypes.array,
+  users: PropTypes.object,
+};

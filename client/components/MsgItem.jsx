@@ -11,11 +11,12 @@ const MsgItem = ({
   isEditing,
   startEdit,
   myId,
+  user,
 }) => {
   return (
     <li className="messages__item">
       <h3>
-        {userId}{" "}
+        {user.nickname}{" "}
         <sub>
           {new Date(timestamp).toLocaleString("ko-KR", {
             year: "numeric",
@@ -55,6 +56,7 @@ MsgItem.propTypes = {
   isEditing: PropTypes.bool,
   startEdit: PropTypes.func,
   myId: PropTypes.string,
+  user: PropTypes.string,
 };
 
 export default MsgItem;

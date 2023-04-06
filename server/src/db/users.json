@@ -1,10 +1,14 @@
 {
-  "son": {
+  "손흥민": {
     "id": "son",
     "nickname": "손흥민"
   },
-  "kang": {
+  "이강인": {
     "id": "kang",
     "nickname": "이강인"
+  },
+  "김민재": {
+    "id": "minjae",
+    "nickname": "김민재"
   }
 }
